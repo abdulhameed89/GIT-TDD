@@ -4,7 +4,6 @@
   var mongoose = require('mongoose');
   var chai = require('chai');
   var expect = chai.expect;
-
   describe('Cat Model', function () {
 
     it('should be a Mongoose model', function () {
@@ -39,3 +38,29 @@
       });
 
   });
+     describe('POST/GET:', function () {
+  it('should respond with JSON array', function(done) {
+  request(app)
+    .get('/')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(function(err, res) {
+      if (err) return done(err);
+      res.body.should.be.instanceof(Object);
+      done();
+    });
+    });
+  it('should respond with redirect on post', function(done) {
+      request(app)
+        .post('/')
+        .send({"Cat":{"catName":"cuteCat"}})
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function(err, res) {
+          if (err) done(err);
+          res.body.should.have.property('Cat');
+          res.body.participant.should.have.property('catName', 'cuteCat');
+
+           });
+});
+});
